@@ -24,18 +24,9 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
     }
 
+
     @IBAction func addImagesToCompare(sender: AnyObject) {
-        let operation = NSBlockOperation(block: {
-            let matchesImage = OpenCVWrapper.getMatchesImage(nil, sourceImage2: nil)
-            MagicalRecord.saveWithBlock({ (context) in
-                let match = Match.MR_createEntityInContext(context)
-                match.matchesImage = UIImageJPEGRepresentation(matchesImage, 0.5)
-            })
-            return
-        })
-        
-        operation.queuePriority = .Low
-        self.operationQueue.addOperation(operation)
+        self.presentChoosingPhotoSourceController()
     }
     
     //MARK: - image picker
@@ -65,21 +56,58 @@ class MainViewController: UIViewController {
         
         self.presentViewController(alertController, animated: true, completion: nil)
     }
+    
+    func imageProcessing(pickedImage : UIImage, completionBlock: (UIImage) -> ()){
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), {
+            let width: CGFloat = 200
+            let height = pickedImage.size.height * width / pickedImage.size.width
+            let size = CGSizeMake(width, height)
+            
+            UIGraphicsBeginImageContextWithOptions(size, false, 1.0)
+            pickedImage.drawInRect(CGRect(origin: CGPointZero, size: size))
+            
+            let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                completionBlock(scaledImage)
+            })
+        })
+    }
 
 }
 
 extension MainViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         
-        dispatch_async(dispatch_get_main_queue(), {[weak self] () -> Void in
-            
-            if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                let matchedImage = OpenCVWrapper.getMatchesImage(pickedImage, sourceImage2: nil)
-                self?.imageView.image = matchedImage
-            }
-            })
         
-        dismissViewControllerAnimated(true, completion: nil)
+        dispatch_async(dispatch_get_main_queue()) {[weak self] in
+            if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+                if self?.imageView.image == nil {
+                    self?.imageProcessing(pickedImage, completionBlock: {(pickedImage) in
+                        self?.imageView.image = pickedImage
+                    })
+                }
+                else {
+                    self?.imageProcessing(pickedImage, completionBlock: { [weak self] (pickedImage) in
+                        let operation = NSBlockOperation(block: {[weak pickedImage] in
+                            let matchesImage = OpenCVWrapper.getMatchesImage(pickedImage, sourceImage2: self?.imageView.image)
+                            MagicalRecord.saveWithBlock({ (context) in
+                                let match = Match.MR_createEntityInContext(context)
+                                match.matchesImage = UIImageJPEGRepresentation(matchesImage, 0.5)
+                            })
+                            return
+                        })
+                        
+                        operation.queuePriority = .Low
+                        self?.operationQueue.addOperation(operation)
+                    })
+                }
+            }
+            
+            self?.dismissViewControllerAnimated(true, completion: nil)
+        }
     }
 }
 

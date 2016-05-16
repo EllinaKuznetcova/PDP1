@@ -14,16 +14,22 @@ using namespace cv;
 @implementation OpenCVWrapper
 
 +(UIImage *)getMatchesImage:(UIImage*)sourceImage1 sourceImage2:(UIImage*)sourceImage2 {
-    string sPath1 = string([[[NSBundle mainBundle] pathForResource:@"image1" ofType:@"jpg"] UTF8String]);
-    string sPath2 = string([[[NSBundle mainBundle] pathForResource:@"image2" ofType:@"jpg"] UTF8String]);
+    
+    Mat img1 = [sourceImage1 cvMatRepresentationColor];
+    Mat img2 = [sourceImage2 cvMatRepresentationColor];
+    
     NSLog(@"Keypoint Detects");
     //-- Step 1: Detect the keypoints using SURF Detector
     
     int minHessian = 400;
-    SurfFeatureDetector detector( minHessian );
+    SurfFeatureDetector detector(minHessian);
     std::vector<KeyPoint> keypoints_object, keypoints_scene;
-    Mat image1 = imread(sPath1,CV_LOAD_IMAGE_GRAYSCALE);
-    Mat image2 = imread(sPath2, CV_LOAD_IMAGE_GRAYSCALE);
+    
+    Mat image1;//imread(sPath1,CV_LOAD_IMAGE_GRAYSCALE);
+    cv::cvtColor(img1, image1, CV_BGR2GRAY);
+    Mat image2; //= imread(sPath2, CV_LOAD_IMAGE_GRAYSCALE);
+    
+    cv::cvtColor(img2, image2, CV_BGR2GRAY);
     detector.detect( image1, keypoints_object );
     detector.detect( image2, keypoints_scene );
     
@@ -58,6 +64,8 @@ using namespace cv;
         }
     }
     
+    printf("%lu\n",selMatches.size());
+    
     cv::Size s1 = image1.size();
     cv::Size s2 = image2.size();
     int height1 = s1.height;
@@ -90,7 +98,7 @@ using namespace cv;
         cv::Point p1 = cv::Point(kp1.pt.x, kp1.pt.y);
         
         int trainIdx = (*it).trainIdx;
-        KeyPoint kp2 = keypoints_object[trainIdx];
+        KeyPoint kp2 = keypoints_scene[trainIdx];
         cv::Point p2 = cv::Point(kp2.pt.x + width1, kp2.pt.y);
         
         cv::line(mat, p1, p2, Scalar(1,1,0));
