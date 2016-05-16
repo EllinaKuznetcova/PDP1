@@ -20,6 +20,8 @@
 		E703D6081CE39B0D0093CDCD /* image1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E703D6061CE39B0D0093CDCD /* image1.jpg */; };
 		E703D6091CE39B0D0093CDCD /* image2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E703D6071CE39B0D0093CDCD /* image2.jpg */; };
 		E703D60E1CE39C6C0093CDCD /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = E703D60D1CE39C6C0093CDCD /* OpenCVWrapper.mm */; };
+		E73997431CE9C3E50065989C /* MatchesResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73997421CE9C3E50065989C /* MatchesResultsViewController.swift */; };
+		E73997451CE9C7DB0065989C /* MatchCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73997441CE9C7DB0065989C /* MatchCollectionViewCell.swift */; };
 		E7B183CF1CE5EE3600F4D4FE /* UIImage+OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = E7B183CE1CE5EE3600F4D4FE /* UIImage+OpenCV.mm */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +68,8 @@
 		E703D6071CE39B0D0093CDCD /* image2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image2.jpg; sourceTree = "<group>"; };
 		E703D60C1CE39C6C0093CDCD /* OpenCVWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
 		E703D60D1CE39C6C0093CDCD /* OpenCVWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCVWrapper.mm; sourceTree = "<group>"; };
+		E73997421CE9C3E50065989C /* MatchesResultsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchesResultsViewController.swift; sourceTree = "<group>"; };
+		E73997441CE9C7DB0065989C /* MatchCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatchCollectionViewCell.swift; sourceTree = "<group>"; };
 		E7B183CD1CE5EE3600F4D4FE /* UIImage+OpenCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+OpenCV.h"; sourceTree = "<group>"; };
 		E7B183CE1CE5EE3600F4D4FE /* UIImage+OpenCV.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIImage+OpenCV.mm"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +139,8 @@
 				E703D60D1CE39C6C0093CDCD /* OpenCVWrapper.mm */,
 				E7B183CD1CE5EE3600F4D4FE /* UIImage+OpenCV.h */,
 				E7B183CE1CE5EE3600F4D4FE /* UIImage+OpenCV.mm */,
+				E73997421CE9C3E50065989C /* MatchesResultsViewController.swift */,
+				E73997441CE9C7DB0065989C /* MatchCollectionViewCell.swift */,
 			);
 			path = PDP;
 			sourceTree = "<group>";
@@ -302,12 +308,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				E703D5F61CE38F010093CDCD /* _Match.swift in Sources */,
+				E73997451CE9C7DB0065989C /* MatchCollectionViewCell.swift in Sources */,
 				E703D5D91CE38A440093CDCD /* MainViewController.swift in Sources */,
 				E703D60E1CE39C6C0093CDCD /* OpenCVWrapper.mm in Sources */,
 				E703D5D71CE38A440093CDCD /* AppDelegate.swift in Sources */,
 				E7B183CF1CE5EE3600F4D4FE /* UIImage+OpenCV.mm in Sources */,
 				E703D5DF1CE38A440093CDCD /* PDP.xcdatamodeld in Sources */,
 				E703D5F51CE38F010093CDCD /* Match.swift in Sources */,
+				E73997431CE9C3E50065989C /* MatchesResultsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
