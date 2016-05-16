@@ -12,15 +12,30 @@ class MainViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
     
+    private(set) lazy var operationQueue: NSOperationQueue = {
+        let queue = NSOperationQueue()
+        queue.name = "com.flatstack.findMatchesQueue"
+        queue.maxConcurrentOperationCount = 1
+        queue.qualityOfService = .Utility
+        return queue
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let image = OpenCVWrapper.getMatchesImage(nil, path2: nil)
-        self.imageView.image = image
     }
 
     @IBAction func addImagesToCompare(sender: AnyObject) {
-        self.presentChoosingPhotoSourceController()
+        let operation = NSBlockOperation(block: {
+            let matchesImage = OpenCVWrapper.getMatchesImage(nil, sourceImage2: nil)
+            MagicalRecord.saveWithBlock({ (context) in
+                let match = Match.MR_createEntityInContext(context)
+                match.matchesImage = UIImageJPEGRepresentation(matchesImage, 0.5)
+            })
+            return
+        })
+        
+        operation.queuePriority = .Low
+        self.operationQueue.addOperation(operation)
     }
     
     //MARK: - image picker
@@ -37,7 +52,6 @@ class MainViewController: UIViewController {
             imagePicker.delegate = sself
             imagePicker.sourceType = .Camera
             sself.presentViewController(imagePicker, animated: true, completion: nil)
-            SVProgressHUD.show()
         }
         alertController.addAction(takePhoto)
         let library = UIAlertAction(title: "Choose from Library", style: .Default) {[weak self](alert: UIAlertAction!) -> Void in
@@ -46,7 +60,6 @@ class MainViewController: UIViewController {
             imagePicker.delegate = sself
             imagePicker.sourceType = .PhotoLibrary
             sself.presentViewController(imagePicker, animated: true, completion: nil)
-            SVProgressHUD.show()
         }
         alertController.addAction(library)
         
@@ -60,20 +73,12 @@ extension MainViewController : UIImagePickerControllerDelegate, UINavigationCont
         
         dispatch_async(dispatch_get_main_queue(), {[weak self] () -> Void in
             
-            if let pickedUrl = info[UIImagePickerControllerMediaURL] as? NSURL {
-                let path = pickedUrl.absoluteString
-                
-            }
-            else {
-                SVProgressHUD.dismiss()
+            if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+                let matchedImage = OpenCVWrapper.getMatchesImage(pickedImage, sourceImage2: nil)
+                self?.imageView.image = matchedImage
             }
             })
         
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        SVProgressHUD.dismiss()
         dismissViewControllerAnimated(true, completion: nil)
     }
 }
