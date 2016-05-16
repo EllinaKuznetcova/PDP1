@@ -7,12 +7,13 @@
 //
 
 #import "OpenCVWrapper.h"
+#import "UIImage+OpenCV.h"
 
 using namespace cv;
 
 @implementation OpenCVWrapper
 
-+(UIImage *) getMatchesImage:(NSString*)path1 path2:(NSString*)path2 {
++(UIImage *)getMatchesImage:(UIImage*)sourceImage1 sourceImage2:(UIImage*)sourceImage2 {
     string sPath1 = string([[[NSBundle mainBundle] pathForResource:@"image1" ofType:@"jpg"] UTF8String]);
     string sPath2 = string([[[NSBundle mainBundle] pathForResource:@"image2" ofType:@"jpg"] UTF8String]);
     NSLog(@"Keypoint Detects");

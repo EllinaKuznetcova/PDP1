@@ -14,6 +14,6 @@
 
 @interface OpenCVWrapper : NSObject
 
-+ (UIImage *)getMatchesImage:(NSString*)path1 path2:(NSString*)path2;
++ (UIImage *)getMatchesImage:(UIImage*)sourceImage1 sourceImage2:(UIImage*)sourceImage2;
 
 @end
