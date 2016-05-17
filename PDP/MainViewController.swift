@@ -11,6 +11,7 @@ import UIKit
 class MainViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var addImageButton: UIButton!
     
     private(set) lazy var operationQueue: NSOperationQueue = {
         let queue = NSOperationQueue()
@@ -24,6 +25,10 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
     }
 
+    @IBAction func removeImage(sender: AnyObject) {
+        self.imageView.image = nil
+        self.addImageButton.setTitle("Add image to compare", forState: .Normal)
+    }
 
     @IBAction func addImagesToCompare(sender: AnyObject) {
         self.presentChoosingPhotoSourceController()
@@ -80,34 +85,30 @@ class MainViewController: UIViewController {
 extension MainViewController : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        
-        
-        dispatch_async(dispatch_get_main_queue()) {[weak self] in
-            if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                if self?.imageView.image == nil {
-                    self?.imageProcessing(pickedImage, completionBlock: {(pickedImage) in
-                        self?.imageView.image = pickedImage
-                    })
-                }
-                else {
-                    self?.imageProcessing(pickedImage, completionBlock: { [weak self] (pickedImage) in
-                        let operation = NSBlockOperation(block: {[weak pickedImage] in
-                            let matchesImage = OpenCVWrapper.getMatchesImage(pickedImage, sourceImage2: self?.imageView.image)
-                            MagicalRecord.saveWithBlock({ (context) in
-                                let match = Match.MR_createEntityInContext(context)
-                                match.matchesImage = UIImageJPEGRepresentation(matchesImage, 0.5)
-                            })
-                            return
-                        })
-                        
-                        operation.queuePriority = .Low
-                        self?.operationQueue.addOperation(operation)
-                    })
-                }
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            if self.imageView.image == nil {
+                self.imageProcessing(pickedImage, completionBlock: {[weak self] (pickedImage) in
+                    self?.imageView.image = pickedImage
+                    self?.addImageButton.setTitle("Choose second image to compare", forState: .Normal)
+                })
             }
-            
-            self?.dismissViewControllerAnimated(true, completion: nil)
+            else {
+                self.imageProcessing(pickedImage, completionBlock: { [weak self] (pickedImage) in
+                    let operation = NSBlockOperation(block: {
+                        let matchesImage = OpenCVWrapper.getMatchesImage(pickedImage, sourceImage2: self?.imageView.image)
+                        MagicalRecord.saveWithBlock({ (context) in
+                            let match = Match.MR_createEntityInContext(context)
+                            match.matchesImage = UIImageJPEGRepresentation(matchesImage, 0.5)
+                        })
+                    })
+                    
+                    operation.queuePriority = .Low
+                    self?.operationQueue.addOperation(operation)
+                })
+            }
         }
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 

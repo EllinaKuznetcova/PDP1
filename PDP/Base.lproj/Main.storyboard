@@ -53,21 +53,31 @@
                                     <segue destination="YAg-iz-srF" kind="show" id="Cjj-qw-Jyt"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tLg-f3-rBV">
+                                <rect key="frame" x="250" y="453" width="101" height="30"/>
+                                <state key="normal" title="Remove image"/>
+                                <connections>
+                                    <action selector="removeImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ezp-tr-VGk"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="z5r-Zi-YB8" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="4m5-3n-d5I"/>
+                            <constraint firstItem="tLg-f3-rBV" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="57x-SL-Tik"/>
                             <constraint firstItem="sOl-Nu-7Bh" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Bio-cg-mex"/>
                             <constraint firstItem="sOl-Nu-7Bh" firstAttribute="top" secondItem="z5r-Zi-YB8" secondAttribute="bottom" constant="16" id="E6E-tV-M7S"/>
                             <constraint firstItem="4MM-ca-OfZ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="MN3-XH-HFT"/>
                             <constraint firstItem="z5r-Zi-YB8" firstAttribute="top" secondItem="4MM-ca-OfZ" secondAttribute="bottom" constant="87" id="OKN-b4-OD6"/>
                             <constraint firstItem="4MM-ca-OfZ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="OrT-KT-rP0"/>
+                            <constraint firstItem="tLg-f3-rBV" firstAttribute="top" secondItem="sOl-Nu-7Bh" secondAttribute="bottom" constant="18" id="ShE-uM-XdL"/>
                             <constraint firstItem="4MM-ca-OfZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="l0H-fk-hOx"/>
                             <constraint firstAttribute="trailing" secondItem="4MM-ca-OfZ" secondAttribute="trailing" id="ujw-ZW-074"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Main" id="3jr-wE-9Qm"/>
                     <connections>
+                        <outlet property="addImageButton" destination="z5r-Zi-YB8" id="PL3-jd-7gA"/>
                         <outlet property="imageView" destination="4MM-ca-OfZ" id="jac-yp-Pf9"/>
                     </connections>
                 </viewController>
