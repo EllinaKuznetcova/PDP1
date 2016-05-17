@@ -60,6 +60,10 @@
                                     <action selector="removeImage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ezp-tr-VGk"/>
                                 </connections>
                             </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VQB-1B-ze4">
+                                <rect key="frame" x="227" y="285" width="146" height="30"/>
+                                <state key="normal" title="Comparation started!"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -71,6 +75,8 @@
                             <constraint firstItem="z5r-Zi-YB8" firstAttribute="top" secondItem="4MM-ca-OfZ" secondAttribute="bottom" constant="87" id="OKN-b4-OD6"/>
                             <constraint firstItem="4MM-ca-OfZ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="OrT-KT-rP0"/>
                             <constraint firstItem="tLg-f3-rBV" firstAttribute="top" secondItem="sOl-Nu-7Bh" secondAttribute="bottom" constant="18" id="ShE-uM-XdL"/>
+                            <constraint firstItem="VQB-1B-ze4" firstAttribute="top" secondItem="4MM-ca-OfZ" secondAttribute="bottom" constant="13" id="Vef-1T-PNQ"/>
+                            <constraint firstItem="VQB-1B-ze4" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="kBB-kP-quo"/>
                             <constraint firstItem="4MM-ca-OfZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="l0H-fk-hOx"/>
                             <constraint firstAttribute="trailing" secondItem="4MM-ca-OfZ" secondAttribute="trailing" id="ujw-ZW-074"/>
                         </constraints>
@@ -79,6 +85,7 @@
                     <connections>
                         <outlet property="addImageButton" destination="z5r-Zi-YB8" id="PL3-jd-7gA"/>
                         <outlet property="imageView" destination="4MM-ca-OfZ" id="jac-yp-Pf9"/>
+                        <outlet property="infoButton" destination="VQB-1B-ze4" id="HwG-D0-iSS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -12,6 +12,7 @@ class MainViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var addImageButton: UIButton!
+    @IBOutlet weak var infoButton: UIButton!
     
     private(set) lazy var operationQueue: NSOperationQueue = {
         let queue = NSOperationQueue()
@@ -105,6 +106,15 @@ extension MainViewController : UIImagePickerControllerDelegate, UINavigationCont
                     operation.queuePriority = .Low
                     self?.operationQueue.addOperation(operation)
                 })
+                
+                self.infoButton.hidden = false
+                
+                let delayInSeconds : UInt64 = 1;
+                let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInSeconds * NSEC_PER_SEC))
+                dispatch_after(popTime, dispatch_get_main_queue(), {[weak self] in
+                    self?.infoButton.hidden = true
+                })
+            
             }
         }
         
