@@ -30,6 +30,7 @@ class MainViewController: UIViewController {
     
     func loadImageAndProcess() {
         self.imageView.sd_setImageWithURL(NSURL(string: "http://www.gen-x.ru/images/zags.jpg"), placeholderImage: UIImage(named: "info.png"), options: [SDWebImageOptions.TransformAnimatedImage])
+        
     }
 
     @IBAction func removeImage(sender: AnyObject) {
@@ -112,7 +113,7 @@ extension MainViewController : UIImagePickerControllerDelegate, UINavigationCont
             let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInSeconds * NSEC_PER_SEC))
             dispatch_after(popTime, dispatch_get_main_queue(), {[weak self] in
                 self?.infoButton.hidden = true
-                })
+            })
 
         }
         
