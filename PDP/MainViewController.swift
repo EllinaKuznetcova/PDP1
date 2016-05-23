@@ -94,27 +94,34 @@ extension MainViewController : UIImagePickerControllerDelegate, UINavigationCont
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            self.imageProcessing(pickedImage, completionBlock: { [weak self] (pickedImage) in
-                let operation = NSBlockOperation(block: {
-                    let matchesImage = OpenCVWrapper.getMatchesImage(pickedImage, sourceImage2: self?.imageView.image)
-                    MagicalRecord.saveWithBlock({ (context) in
-                        let match = Match.MR_createEntityInContext(context)
-                        match.matchesImage = UIImageJPEGRepresentation(matchesImage, 0.5)
+            if self.imageView.image == nil {
+                self.imageProcessing(pickedImage, completionBlock: {[weak self] (pickedImage) in
+                    self?.imageView.image = pickedImage
+                    self?.addImageButton.setTitle("Choose second image to compare", forState: .Normal)
+                })
+            }
+            else {
+                self.imageProcessing(pickedImage, completionBlock: { [weak self] (pickedImage) in
+                    let operation = NSBlockOperation(block: {
+                        let matchesImage = OpenCVWrapper.getMatchesImage(pickedImage, sourceImage2: self?.imageView.image)
+                        MagicalRecord.saveWithBlock({ (context) in
+                            let match = Match.MR_createEntityInContext(context)
+                            match.matchesImage = UIImageJPEGRepresentation(matchesImage, 0.5)
+                        })
                     })
-                })
+                    
+                    operation.queuePriority = .Low
+                    self?.operationQueue.addOperation(operation)
+                    })
                 
-                operation.queuePriority = .Low
-                self?.operationQueue.addOperation(operation)
+                self.infoButton.hidden = false
+                
+                let delayInSeconds : UInt64 = 1;
+                let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInSeconds * NSEC_PER_SEC))
+                dispatch_after(popTime, dispatch_get_main_queue(), {[weak self] in
+                    self?.infoButton.hidden = true
                 })
-            
-            self.infoButton.hidden = false
-            
-            let delayInSeconds : UInt64 = 1;
-            let popTime = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInSeconds * NSEC_PER_SEC))
-            dispatch_after(popTime, dispatch_get_main_queue(), {[weak self] in
-                self?.infoButton.hidden = true
-            })
-
+            }
         }
         
         self.dismissViewControllerAnimated(true, completion: nil)
